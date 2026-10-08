@@ -1,0 +1,125 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with role and preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "photoURL": { "type": "string", "maxLength": 512 },
+        "role": { "type": "string", "enum": ["admin", "operator", "contributor"] },
+        "department": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "FoodWasteLog": {
+      "title": "FoodWasteLog",
+      "description": "Food waste deposit record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "category": { "type": "string", "enum": ["vegetable_fruit", "meat_protein", "grains_bakery", "coffee_eggshell", "mixed_scraps"] },
+        "weightKg": { "type": "number" },
+        "moistureEstimate": { "type": "number" },
+        "sourceLocation": { "type": "string", "maxLength": 128 },
+        "targetBinId": { "type": "string", "maxLength": 128 },
+        "recordedByUid": { "type": "string", "maxLength": 128 },
+        "recordedByEmail": { "type": "string", "maxLength": 128 },
+        "recordedByName": { "type": "string", "maxLength": 128 },
+        "carbonOffsetKg": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["category", "weightKg", "sourceLocation", "recordedByUid", "createdAt"]
+    },
+    "CompostBin": {
+      "title": "CompostBin",
+      "description": "Smart composter / digester machine or bin",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "model": { "type": "string", "maxLength": 128 },
+        "capacityKg": { "type": "number" },
+        "currentWeightKg": { "type": "number" },
+        "status": { "type": "string", "enum": ["idle", "processing", "curing", "maintenance"] },
+        "temperatureC": { "type": "number" },
+        "moisturePct": { "type": "number" },
+        "phLevel": { "type": "number" },
+        "aerationActive": { "type": "boolean" },
+        "heatingActive": { "type": "boolean" },
+        "currentBatchId": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "capacityKg", "status", "updatedAt"]
+    },
+    "FermentationBatch": {
+      "title": "FermentationBatch",
+      "description": "Decomposition and bio-conversion batch cycle",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "binId": { "type": "string", "maxLength": 128 },
+        "binName": { "type": "string", "maxLength": 128 },
+        "inputWeightKg": { "type": "number" },
+        "inoculantType": { "type": "string", "maxLength": 128 },
+        "carbonNitrogenRatio": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["loading", "thermophilic", "curing", "completed", "failed"] },
+        "progressPct": { "type": "number" },
+        "startedAt": { "type": "string" },
+        "estimatedEndAt": { "type": "string" },
+        "completedAt": { "type": "string" },
+        "expectedYieldKg": { "type": "number" },
+        "actualYieldKg": { "type": "number" },
+        "operatorUid": { "type": "string", "maxLength": 128 },
+        "operatorName": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["binId", "inputWeightKg", "status", "startedAt"]
+    },
+    "FertilizerOutput": {
+      "title": "FertilizerOutput",
+      "description": "Harvested bio-fertilizer product batches",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "batchId": { "type": "string", "maxLength": 128 },
+        "type": { "type": "string", "enum": ["pellet", "powder", "liquid_bio"] },
+        "quantityKg": { "type": "number" },
+        "npkRating": { "type": "string", "maxLength": 64 },
+        "moisturePct": { "type": "number" },
+        "qualityGrade": { "type": "string", "enum": ["premium", "standard", "utility"] },
+        "destination": { "type": "string", "enum": ["community_garden", "campus_farm", "distribution_sale", "storage"] },
+        "harvestDate": { "type": "string" },
+        "notes": { "type": "string", "maxLength": 500 },
+        "recordedByUid": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["batchId", "type", "quantityKg", "qualityGrade", "harvestDate"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profiles and privileges"
+    },
+    "/wasteLogs/{wasteLogId}": {
+      "schema": "FoodWasteLog",
+      "description": "Daily food waste collection and log records"
+    },
+    "/compostBins/{binId}": {
+      "schema": "CompostBin",
+      "description": "Smart composting units and sensor status"
+    },
+    "/batches/{batchId}": {
+      "schema": "FermentationBatch",
+      "description": "Processing batches transforming waste to fertilizer"
+    },
+    "/fertilizerOutputs/{outputId}": {
+      "schema": "FertilizerOutput",
+      "description": "Produced fertilizer batches and inventory distribution"
+    }
+  }
+}

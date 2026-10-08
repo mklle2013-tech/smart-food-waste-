@@ -1,0 +1,6 @@
+{
+  "name": "Smart Food Waste-to-Fertilizer System",
+  "description": "ระบบจัดการและติดตามการแปรรูปเศษอาหารเป็นปุ๋ยอินทรีย์อัจฉริยะ พร้อมการเชื่อมต่อ Firebase และเข้าสู่ระบบด้วย Gmail",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
